@@ -1,4 +1,5 @@
 require 'yaml'
+require 'date'
 module TimeTracker
 
   BASEDIR = File.dirname(File.expand_path('..', __FILE__)) # parent directory of this file
@@ -125,6 +126,14 @@ module TimeTracker
       return a
     end
 
+    def parse_date_time_array(datetime_array)
+      yr,mo,dy,hr,mm,ss = datetime_array
+      tz = Time.new.strftime('%:z')
+      return Time.new(yr,mo,dy,hr,mm,ss,tz)
+    rescue ArgumentError => e
+      raise "Invalid date/time element found at '#{yr}-#{mo}-#{dy} #{hr}:#{mm}:#{ss}' : #{e}"
+    end
+
     def seconds_to_hms(seconds)
       Time.at(seconds).utc.strftime("%H:%M:%S")
     end
@@ -155,9 +164,8 @@ module TimeTracker
       # expects format like '2018-02-21 16:39:27 :: category :: Description of work'
       hash = {}
       splitentry = entries.split(' :: ')
-      timezone = Time.new.strftime("%:z")
       ta = splitentry[0].split(' ')[0].split('-')+splitentry[0].split(' ')[1].split(':')
-      hash[:start] = Time.new(ta[0],ta[1],ta[2],ta[3],ta[4],ta[5],timezone)
+      hash[:start] = parse_date_time_array(ta)
       hash[:category] = splitentry[1]
       hash[:description] = splitentry[2].gsub(/\n*/,'')
       return hash
