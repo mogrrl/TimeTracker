@@ -38,31 +38,39 @@ OptionParser.new do |opts|
 end.parse!
 
 def generate_report
-  puts "Please provide a start date for your report, or leave blank for 2018-01-01"
-  print "Your response (YYYY-MM-DD) => "
-  start_date = $stdin.gets.chomp
-  start_date = '2018-01-01' unless is_date_this_year?(start_date)
-  puts "Please provide an end date for your report, or leave blank for today"
-  print "Your response (YYYY-MM-DD) => "
-  end_date = $stdin.gets.chomp
-  end_date = Time.new.strftime('%Y-%m-%d').to_s unless is_date_this_year?(end_date)
+  beginning_of_year = Time.new(Time.new.year,01,01).strftime('%Y-%m-%d').to_s
+  today = Time.new.strftime('%Y-%m-%d').to_s
+  start_date, end_date, response = nil
+  until start_date
+    puts "Please provide a start date for your report, or leave blank for #{beginning_of_year}"
+    print "Your response (YYYY-MM-DD) => "
+    response = $stdin.gets.chomp
+    start_date = response.empty? ? beginning_of_year : response
+    unless valid_date?(start_date)
+      puts "ERROR :: No valid date given."
+      start_date, response = nil
+    end
+  end
+  until end_date
+    puts "Please provide an end date for your report, or leave blank for #{today}"
+    print "Your response (YYYY-MM-DD) => "
+    response = $stdin.gets.chomp
+    end_date = response.empty? ? today : response
+    unless valid_date?(end_date)
+      puts "ERROR :: No valid date given."
+      end_date, response = nil
+    end
+  end
   puts "\n\nCreating report starting #{start_date} through #{end_date}"
   r = TimeTracker::Report.new(start_date, end_date)
   puts "\n\n"
   puts r.generate_report_against_report_array_all_categories
 end
 
-def is_date_this_year?(string)
-  if string.empty?
-    return false
-  else
-    t = string.split('-')
-    if Time.new(t[0],t[1],t[2]) >= Time.new(2018,01,01)
-      return true
-    else
-      return false
-    end
-  end
+def valid_date?(date_string)
+  return true if Date.parse(date_string)
+rescue ArgumentError
+  return false
 end
 
 if options[:report]
