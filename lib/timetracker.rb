@@ -3,7 +3,8 @@ require 'date'
 module TimeTracker
 
   BASEDIR = File.dirname(File.expand_path('..', __FILE__)) # parent directory of this file
-  TRACKER_FILE = BASEDIR + '/tracker.txt'
+  HOMEDIR = '/Users/maureenseller/TimeTrack'
+  TRACKER_FILE = HOMEDIR + '/tracker.txt'
 
   CONFIG = YAML.load_file(BASEDIR + '/lib/config.yml')
 
@@ -11,6 +12,10 @@ module TimeTracker
 
   class Track
     class << self
+      def list_categories
+        puts "Valid categories are:\n  #{TimeTracker::CATEGORIES.join("\n  ")}"
+      end
+
       def generate_entry(category, start_time, description)
         case
         when category == 'eod'
@@ -70,7 +75,8 @@ module TimeTracker
         puts # start with whitespace
         case
         when type == 'category'
-          puts "You did not provide a valid category.  Please choose a category from:\n  #{TimeTracker::CATEGORIES.join("\n  ")}"
+          puts "You did not provide a valid category."
+          self.list_categories
         when type == 'description'
           puts "Please provide a non-empty string that describes your work for this entry."
         end

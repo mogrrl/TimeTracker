@@ -31,6 +31,11 @@ OptionParser.new do |opts|
     options[:report] = true
   end
 
+  opts.on("-s", "--list_categories", "Prints a list of valid categories") do
+    TimeTracker::Track.list_categories
+    exit
+  end
+
   opts.on("-h", "--help", "Prints this help") do
     puts opts
     exit
