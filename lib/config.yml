@@ -1,6 +1,17 @@
 ---
 categories:
-- testplans
-- larnin
-- framework
+- teamwork
+- education
+- process
+- meetings
+- admin
 - other
+
+descriptions:
+  teamwork: "completing testplans, running tests, or other work specific to the fencing team"
+  education: "watching tutorials, research, and any other time spent learning things"
+  process: "work that contributes to framework, process, business-objectives, or other meta- considerations"
+  meetings: "what it says on the tin"
+  admin: "personal 'process' work / administrivia"
+  other: "anything that doesn't fit in the other categories"
+  none: "lunch, pfd, eod, breaks, etc."

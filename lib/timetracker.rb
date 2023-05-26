@@ -13,7 +13,12 @@ module TimeTracker
   class Track
     class << self
       def list_categories
-        puts "Valid categories are:\n  #{TimeTracker::CATEGORIES.join("\n  ")}"
+        bold = "\033[1;31m"
+        plain = "\033[0m"
+        puts "Valid categories are:"
+        TimeTracker::CATEGORIES.each do |category|
+          puts "  #{bold}#{category} #{plain} \t #{TimeTracker::CONFIG['descriptions'][category]}"
+        end
       end
 
       def generate_entry(category, start_time, description)
