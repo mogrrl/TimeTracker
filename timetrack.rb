@@ -27,6 +27,11 @@ OptionParser.new do |opts|
     exit
   end
 
+  opts.on("-y", "--holiday", "Creates an entry for a holiday or PTO") do
+    TimeTracker::Track.enter_holiday
+    exit
+  end
+
   opts.on("-r", "--report", "Prints a report grouped by category") do
     options[:report] = true
   end

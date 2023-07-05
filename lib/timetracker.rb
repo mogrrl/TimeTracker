@@ -27,6 +27,8 @@ module TimeTracker
           entry = "#{Time.new.strftime('%Y-%m-%d')} #{start_time} :: none :: END OF DAY\n\n\n"
         when category == 'lunch'
           entry = "#{Time.new.strftime('%Y-%m-%d')} #{start_time} :: none :: LUNCH"
+        when category == 'holiday'
+          return enter_holiday
         else
           entry = "#{Time.new.strftime('%Y-%m-%d')} #{start_time} :: #{category} :: #{description}"
         end
@@ -38,6 +40,12 @@ module TimeTracker
         f.write(string + "\n")
         f.close
         puts string
+      end
+
+      def enter_holiday
+        entry = "#{Time.new.strftime('%Y-%m-%d')} 09:00 :: none :: HOLIDAY or PTO\n"
+        entry += "#{Time.new.strftime('%Y-%m-%d')} 17:00 :: none :: END OF DAY\n\n\n"
+        write_line_to_file(entry)
       end
 
       def is_category?(string)
